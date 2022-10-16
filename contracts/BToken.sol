@@ -2,6 +2,8 @@ pragma solidity ^0.8.9;
 
 contract BToken {
 
+    event mint(address _count);
+
     uint256 startDate;
     uint256 duration;
     uint256 creationDate;
