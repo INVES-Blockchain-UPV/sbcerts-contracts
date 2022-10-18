@@ -4,36 +4,59 @@ contract BToken {
 
     event Mint(address indexed _to, string _metadata);
 
-    uint256 startDate;
-    uint256 duration;
-    uint256 creationDate;
+    uint256 _startDate;
+    uint256 _duration;
+    uint256 _creationDate;
     
-    string title;
-    string description;
-    
-    address owner;
+    string _title;
+    string _description;
+    string _url;
 
-    mapping(address => bool) holds; ///Token has been minted
-    mapping(address => string) holder;
-    
-    constructor(string memory _title, string memory _description, uint256 _startDate, uint256 _duration) {
+    address _owner;
 
-        title = _title;
-        description = _description;
-        creationDate = block.timestamp;
-        startDate = _startDate;
-        duration = _duration;
-        owner = msg.sender;
+    mapping(address => bool) _holds; ///Token has been minted
+    mapping(address => string) _holder;
+    
+    constructor(string memory title, string memory description, uint256 startDate, uint256 duration,string memory url) {
+
+        _title = title;
+        _description = description;
+        _creationDate = block.timestamp;
+        _startDate = startDate;
+        _duration = duration;
+        _url = url;
+        _owner = msg.sender;
     }
 
     modifier onlyOwner(){
-        require(msg.sender == owner);
+        require(msg.sender == _owner);
         _;
     }
 
-    function mint(address to_, string memory _metadata) public onlyOwner() {
+    //Possible metadata format: Perico,Juan
+    function mint(address to, string memory metadata) public onlyOwner() {
+    }
+
+    function title() public view returns (string memory){
+        return _title;
+    }
+
+    function description() public view returns (string memory){
+        return _description;
 
     }
+
+    function tokenURl() public view returns (string memory){
+        return _url;
+    }
+
+    function isOwner(address _address) public returns (bool memory){
+        //Necessary instead of initialise all bools in map to false (more expensive)
+        if(_holds[_address] == true)return true;
+        else return false;
+    }
+
+
 
 
 }
