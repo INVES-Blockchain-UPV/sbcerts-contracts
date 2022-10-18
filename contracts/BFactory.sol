@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 contract BFactory {
 
     event createEvent(address indexed _event, uint256 _currentEvent, string _name);
+    event removeEvent(address indexed _event, uint256 _eventid);
 
     uint256 currentEvent;
     
