@@ -35,6 +35,9 @@ contract BToken {
 
     //Possible metadata format: Perico,Juan
     function mint(address to, string memory metadata) public onlyOwner() {
+        _holds[to] = true;
+        _holder[to] = metadata;
+        emit Mint(to, metadata);
     }
 
     function title() public view returns (string memory){
