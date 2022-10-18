@@ -6,9 +6,9 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
-
-    event eventCreated(address indexed _event, uint256 _currentEvent, string _name);
-    event removeEvent(address indexed _event, uint256 _eventid);
+    
+    event EventCreation(address indexed _event, uint256 _eventId, string _name);
+    event EventCancelation(address indexed _event, uint256 _eventId, string _name);
 
     uint256 currentEvent;
     
@@ -35,7 +35,7 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         require( bytes(_title).length > 0 && bytes(_title).length < 20, "Name invalid!");
         require( bytes(_description).length > 40 && bytes(_description).length > 40, "Description must be 40-200 characters!");
         require(_duration > 300, "Minimum time votation 5 minutes");
-        
+
     }  
     
 }
