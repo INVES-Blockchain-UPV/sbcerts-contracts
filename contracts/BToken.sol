@@ -53,6 +53,18 @@ contract BToken {
         return _url;
     }
 
+    function startDate() public view returns (uint memory){
+        return _startDate;
+    }
+
+    function duration() public view returns (uint memory){
+        return _duration;
+    }
+
+    function creationDate() public view returns (uint memory){
+        return _creationDate;
+    }
+
     function isOwner(address _address) public returns (bool memory){
         //Necessary instead of initialise all bools in map to false (more expensive)
         if(_holds[_address] == true)return true;
