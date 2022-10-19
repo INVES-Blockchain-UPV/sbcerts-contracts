@@ -11,29 +11,10 @@ contract BToken {
     string title;
     string description;
     
-    address owner;
-
     mapping(address => bool) holds; ///Token has been minted
     mapping(address => string) holder;
     
-    constructor(string memory _title, string memory _description, uint256 _startDate, uint256 _duration) {
-
-        title = _title;
-        description = _description;
-        creationDate = block.timestamp;
-        startDate = _startDate;
-        duration = _duration;
-        owner = msg.sender;
+    constructor() {
+        
     }
-
-    modifier onlyOwner(){
-        require(msg.sender == owner);
-        _;
-    }
-
-    function mint(address to_, string memory _metadata) public onlyOwner() {
-
-    }
-
-
 }
