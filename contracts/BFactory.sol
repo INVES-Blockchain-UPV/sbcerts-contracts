@@ -25,7 +25,7 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     function _authorizeUpgrade(address) internal override onlyOwner {}
     
     function createEvent(
-        address _events,
+        address _events, // can be eliminated?
         uint256 _startDate, 
         uint256 _duration,
         string memory _title,
@@ -49,8 +49,15 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         eventsId[_title] = currentEvent;
         events[currentEvent] = _events;
         ++currentEvent;
-        
-        emit EventCreation(_events, eventsId[_title], _title);
+
+        emit EventCreation(_events, eventsId[_title], _title); //address(myEvent)
+    } 
+
+    function getEvents(uint256 _eventId) external view returns(address){
+        return events[_eventId];
     }  
     
+    function getEventsId(string memory _tittle) external view returns(uint256){
+        return eventsId[_tittle];
+    }  
 }
