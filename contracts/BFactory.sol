@@ -26,16 +26,31 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     
     function createEvent(
         address _events,
-        string memory _startDate,
+        uint256 _startDate, 
         uint256 _duration,
         string memory _title,
         string memory _description
     ) public  onlyOwner{
         require(_events != address(0x0));
+        require(eventsId[_title] == 0, "This name already exist");
         require( bytes(_title).length > 0 && bytes(_title).length < 20, "Name invalid!");
         require( bytes(_description).length > 40 && bytes(_description).length > 40, "Description must be 40-200 characters!");
         require(_duration > 300, "Minimum time votation 5 minutes");
+        require(_startDate > block.timestamp, "Start date not valid");
 
+        BToken myEvent = new BToken(
+            _startDate,
+            _duration,
+            block.timestamp, //creationDate in Btoken
+            _title,
+            _description
+        );
+
+        eventsId[_title] = currentEvent;
+        events[currentEvent] = _events;
+        ++currentEvent;
+        
+        emit EventCreation(_events, eventsId[_title], _title);
     }  
     
 }
