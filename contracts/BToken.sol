@@ -4,13 +4,13 @@ contract BToken {
 
     event Mint(address indexed _to, string _metadata);
 
-    uint256 _startDate;
-    uint256 _duration;
-    uint256 _creationDate;
+    uint256 private _startDate;
+    uint256 private _duration;
+    uint256 private _creationDate;
     
-    string _title;
-    string _description;
-    string _url;
+    string private _title;
+    string private _description;
+    string private _url;
 
     address _owner;
 
@@ -33,8 +33,23 @@ contract BToken {
         _;
     }
 
-    //Possible metadata format: Perico,Juan
-    function mint(address to, string memory metadata) public onlyOwner() {
+    //Possible metadata format: Perico, Juan
+    function mint(address to, string calldata metadata) private onlyOwner() {
+        _mint(to, metadata);
+    }
+    
+    function mintBatch(address[] calldata holders, string[] calldata metadata) public onlyOwner() {
+        uint256 length = holders.length;
+        require(length == metadata.length, "Wrong Batch");
+        for(uint256 i; i < length;) {
+          _mint(holders[i], metadata[i]);        
+          unchecked {
+            ++i;
+           }
+        }
+    }
+    
+    function _mint(address to, string memory metadata) private {
         _holds[to] = true;
         _holder[to] = metadata;
         emit Mint(to, metadata);
@@ -53,25 +68,19 @@ contract BToken {
         return _url;
     }
 
-    function startDate() public view returns (uint memory){
+    function startDate() public view returns (uint256){
         return _startDate;
     }
 
-    function duration() public view returns (uint memory){
+    function duration() public view returns (uint256){
         return _duration;
     }
 
-    function creationDate() public view returns (uint memory){
+    function creationDate() public view returns (uint256){
         return _creationDate;
     }
 
     function isOwner(address _address) public returns (bool memory){
-        //Necessary instead of initialise all bools in map to false (more expensive)
-        if(_holds[_address] == true)return true;
-        else return false;
+        return _holds[address];
     }
-
-
-
-
 }
