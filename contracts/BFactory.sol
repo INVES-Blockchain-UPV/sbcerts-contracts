@@ -28,7 +28,8 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         uint256 _startDate, 
         uint256 _duration,
         string memory _title,
-        string memory _description
+        string memory _description,
+        string memory _url
     ) public  onlyOwner{
         require(eventsId[_title] == 0, "This name already exist");
         require( bytes(_title).length > 0 && bytes(_title).length < 20, "Name invalid!");
@@ -37,11 +38,12 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         require(_startDate > block.timestamp, "Start date not valid");
 
         BToken myEvent = new BToken(
+            _title,
+            _description,
             _startDate,
             _duration,
-            block.timestamp, //creationDate in Btoken
-            _title,
-            _description
+            _url
+            
         );
 
         eventsId[_title] = currentEvent;
