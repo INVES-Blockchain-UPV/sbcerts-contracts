@@ -5,6 +5,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
+contract IBToken{
+    function startDate() public view returns(uint256){}
+}
+
 contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     
     event EventCreation(address indexed _event, uint256 _eventId, string _name);
@@ -53,14 +57,15 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         emit EventCreation(address(myEvent), eventsId[_title], _title); //address(myEvent)
     }
 
-    function removeCharla(string memory _tittle) public onlyOwner{
-        uint256 id = eventsId[_tittle];
+    function removeCharla(string memory _title) public onlyOwner{
+        require(block.timestamp < IBToken(events[eventsId[_title]]).startDate());
+        uint256 id = eventsId[_title];
         address addressEvent = events[id];
 
         delete events[id];
-        delete eventsId[_tittle];
+        delete eventsId[_title];
 
-        emit EventCancelation(addressEvent, id, _tittle);
+        emit EventCancelation(addressEvent, id, _title);
     }
 
     function getEvents(uint256 _eventId) external view returns(address){
