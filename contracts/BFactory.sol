@@ -5,8 +5,9 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract IBToken{
-    function startDate() public view returns(uint256){}
+interface IBToken{
+    function startDate() external view returns(uint256);
+    function title() external view returns(string memory);
 }
 
 contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
@@ -17,10 +18,8 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     uint256 currentEvent;
     
     mapping(uint256 => address) events; /// event id to Btoken.sol contract  
-    mapping(string => uint256)  eventsId; /// event name to id
 
     function initialize() public initializer {
-        currentEvent = 1;
          ///@dev no constructor -> initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -35,7 +34,6 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         string memory _description,
         string memory _url
     ) public  onlyOwner{
-        require(eventsId[_title] == 0, "This name already exist");
         require( bytes(_title).length > 0 && bytes(_title).length < 20, "Name invalid!");
         require( bytes(_description).length > 40 && bytes(_description).length > 40, "Description must be 40-200 characters!");
         require(_duration > 300, "Minimum time votation 5 minutes");
@@ -50,29 +48,22 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
             
         );
 
-        eventsId[_title] = currentEvent;
-        events[currentEvent] = address(myEvent);
-        ++currentEvent;
+        events[++currentEvent] = address(myEvent);
 
-        emit EventCreation(address(myEvent), eventsId[_title], _title); //address(myEvent)
+        emit EventCreation(address(myEvent), currentEvent, _title); //address(myEvent)
     }
 
-    function removeCharla(string memory _title) public onlyOwner{
-        require(block.timestamp < IBToken(events[eventsId[_title]]).startDate());
-        uint256 id = eventsId[_title];
-        address addressEvent = events[id];
+    function removeCharla(uint256 _id) public onlyOwner{
+        require(block.timestamp < IBToken(events[_id]).startDate());
 
-        delete events[id];
-        delete eventsId[_title];
+        address addressEvent = events[_id];
 
-        emit EventCancelation(addressEvent, id, _title);
+        delete events[_id];
+
+        emit EventCancelation(addressEvent, _id, IBToken(events[_id]).title());
     }
 
     function getEvents(uint256 _eventId) external view returns(address){
         return events[_eventId];
-    }  
-    
-    function getEventsId(string memory _tittle) external view returns(uint256){
-        return eventsId[_tittle];
     }  
 }
