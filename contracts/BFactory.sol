@@ -51,7 +51,17 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         ++currentEvent;
 
         emit EventCreation(address(myEvent), eventsId[_title], _title); //address(myEvent)
-    } 
+    }
+
+    function removeCharla(string memory _tittle) public onlyOwner{
+        uint256 id = eventsId[_tittle];
+        address addressEvent = events[id];
+
+        delete events[id];
+        delete eventsId[_tittle];
+
+        emit EventCancelation(addressEvent, id, _tittle);
+    }
 
     function getEvents(uint256 _eventId) external view returns(address){
         return events[_eventId];
