@@ -80,7 +80,7 @@ contract BToken {
         return _creationDate;
     }
 
-    function isOwner(address _address) public returns (bool memory){
-        return _holds[address];
+    function isOwner(address _address) public view returns (bool){
+        return _holds[_address];
     }
 }
