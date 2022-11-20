@@ -34,7 +34,7 @@ contract BToken {
     }
 
     //Possible metadata format: Perico, Juan
-    function mint(address to, string calldata metadata) private onlyOwner() {
+    function mint(address to, string calldata metadata) public onlyOwner() {
         _mint(to, metadata);
     }
     
@@ -80,7 +80,7 @@ contract BToken {
         return _creationDate;
     }
 
-    function isOwner(address _address) public returns (bool memory){
-        return _holds[address];
+    function isOwner(address _address) public view returns (bool){
+        return _holds[_address];
     }
 }
