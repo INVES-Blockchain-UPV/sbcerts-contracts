@@ -33,6 +33,11 @@ contract BToken {
         _;
     }
 
+    modifier onlyHolder(){
+        require(_holder[msg.sender]);
+        _;
+    }
+
     //Possible metadata format: Perico, Juan
     function mint(address to, string calldata metadata) private onlyOwner() {
         _mint(to, metadata);
@@ -80,7 +85,9 @@ contract BToken {
         return _creationDate;
     }
 
-    function isOwner(address _address) public returns (bool memory){
-        return _holds[address];
+    function revoke() public onlyHolder{
+        delete _holder[msg.sender];
     }
+
+
 }
