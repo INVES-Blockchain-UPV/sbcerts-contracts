@@ -34,7 +34,7 @@ contract BToken {
     }
 
     modifier onlyHolder(){
-        require(_holder[msg.sender]);
+        require(_holds[msg.sender]);
         _;
     }
 
