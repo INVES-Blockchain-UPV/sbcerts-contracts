@@ -17,7 +17,7 @@ contract BToken {
     mapping(address => bool) _holds; ///Token has been minted
     mapping(address => string) _holder;
     
-    constructor(string memory title, string memory description, uint256 startDate, uint256 duration,string memory url) {
+    constructor(string memory title, string memory description, uint256 startDate, uint256 duration, string memory url) {
 
         _title = title;
         _description = description;

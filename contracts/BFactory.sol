@@ -13,7 +13,7 @@ interface IBToken{
 contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     
     event EventCreation(address indexed _event, uint256 _eventId, string _name);
-    event EventCancelation(address indexed _event, uint256 _eventId, string _name);
+    event EventCancelation(address indexed _event, string _name);
 
     uint256 currentEvent;
     
@@ -54,13 +54,13 @@ contract BFactory is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     }
 
     function removeCharla(uint256 _id) public onlyOwner{
-        require(block.timestamp < IBToken(events[_id]).startDate());
+        require(block.timestamp < IBToken(events[_id]).startDate(), "You can not remove it");
 
         address addressEvent = events[_id];
-
+        string memory aux = IBToken(events[_id]).title();
         delete events[_id];
 
-        emit EventCancelation(addressEvent, _id, IBToken(events[_id]).title());
+        emit EventCancelation(addressEvent, aux);
     }
 
     function getEvents(uint256 _eventId) external view returns(address){
